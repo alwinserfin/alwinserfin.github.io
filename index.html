@@ -176,7 +176,7 @@
             const wish = document.createElement("div");
             wish.className = "wish-entry";
             wish.style.animationDelay = `${index * 0.2}s`;
-            wish.innerHTML = `<strong>${entry.Name || 'Anonymous'}</strong><br>${entry.Wishes}`;
+            wish.innerHTML = `<strong>${entry.Name || 'Anonymous'}</strong><br>${entry["Wishes For The Couple"]}`;
             container.appendChild(wish);
           }
         });
