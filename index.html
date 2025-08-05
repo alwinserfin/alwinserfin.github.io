@@ -10,7 +10,6 @@
       margin: 0;
       padding: 0;
       background: linear-gradient(to top, #fff8f0, #d7f5e8);
-      background-image: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=1920&q=80');
       background-size: cover;
       background-repeat: no-repeat;
       color: #333;
@@ -37,29 +36,16 @@
       font-size: 1.1em;
       margin-bottom: 2em;
     }
-    .rsvp, .wishes-board {
+    .form-embed, .wishes-board, .photo-section {
       background: #ffffffcc;
       padding: 2rem;
       border-radius: 12px;
       margin-bottom: 2rem;
     }
-    input, textarea, select {
+    iframe {
       width: 100%;
-      padding: 0.75rem;
-      margin-top: 0.5rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1em;
-    }
-    button {
-      padding: 0.75rem 1.5rem;
-      background-color: #28a745;
-      color: white;
+      height: 1000px;
       border: none;
-      border-radius: 8px;
-      font-size: 1em;
-      cursor: pointer;
     }
     .footer {
       margin-top: 3rem;
@@ -73,58 +59,88 @@
       margin-bottom: 1rem;
       text-align: left;
       box-shadow: 0 0 4px rgba(0,0,0,0.1);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s ease forwards;
+    }
+    .photo-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    .photo-placeholder {
+      width: 100%;
+      height: 200px;
+      background-color: #eee;
+      border: 2px dashed #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #777;
+      font-style: italic;
+      border-radius: 8px;
+    }
+    .fade-in {
+      opacity: 0;
+      animation: fadeIn 2s ease forwards;
+    }
+    .slide-up {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideUp 1s ease-out forwards;
+    }
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+    @keyframes slideUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
 <body>
   <div class="overlay">
     <div class="container">
-      <h1>Alwin & Serfin</h1>
-      <h2>Invite you to celebrate their wedding</h2>
-      <div class="details">
+      <h1 class="fade-in">Alwin & Serfin</h1>
+      <h2 class="fade-in">Invite you to celebrate their wedding</h2>
+      <div class="details slide-up">
         <p><strong>Date:</strong> Saturday, May 30, 2026</p>
         <p><strong>Time:</strong> 6:00 PM</p>
         <p><strong>Location:</strong> Royal Avilla, Lombok</p>
         <p><strong>Dress Code:</strong> No batik, suits only</p>
       </div>
 
-      <div class="rsvp">
-        <h2>RSVP</h2>
-        <form name="rsvp" method="POST" data-netlify="true">
-          <label>Full Name:</label>
-          <input type="text" name="name" required>
-
-          <label>Phone Number:</label>
-          <input type="tel" name="phone" required>
-
-          <label>Will you attend?</label>
-          <select name="attending" required>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-          </select>
-
-          <label>Number of People Attending:</label>
-          <select name="guests" required>
-            <option value="1">1</option>
-            <option value="2">2</option>
-          </select>
-
-          <label>Wishes for the couple:</label>
-          <textarea name="wishes" rows="3"></textarea>
-
-          <label>Dietary Restrictions:</label>
-          <textarea name="diet" rows="2"></textarea>
-
-          <button type="submit">Send RSVP</button>
-        </form>
+      <div class="photo-section slide-up">
+        <h2>Our Love Story in Pictures 📸</h2>
+        <div class="photo-gallery">
+          <div class="photo-placeholder">Photo 1 Placeholder</div>
+          <div class="photo-placeholder">Photo 2 Placeholder</div>
+          <div class="photo-placeholder">Photo 3 Placeholder</div>
+        </div>
+        <p style="margin-top:1rem; font-size: 0.9em; color: #555;">Upload your photos later by replacing these placeholders with real images.</p>
       </div>
 
-      <div class="wishes-board">
+      <div class="form-embed slide-up">
+        <h2>RSVP Form</h2>
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfVeiNj53g5Bdu0ZwnNk1gbhrOvi1UHZ3lTBEJiKV6Iw3-hJA/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+      </div>
+
+      <div class="wishes-board slide-up">
         <h2>Wishes from Friends & Family 💌</h2>
         <div id="wishes-container">Loading wishes...</div>
       </div>
 
-      <div class="footer">
+      <div class="footer fade-in">
         <p>We can't wait to celebrate with you! 🌴💍</p>
       </div>
     </div>
@@ -137,10 +153,11 @@
         const container = document.getElementById("wishes-container");
         container.innerHTML = "";
 
-        data.forEach(entry => {
+        data.forEach((entry, index) => {
           if (entry.Wishes && entry.Wishes.trim() !== "") {
             const wish = document.createElement("div");
             wish.className = "wish-entry";
+            wish.style.animationDelay = `${index * 0.2}s`;
             wish.innerHTML = `<strong>${entry.Name || 'Anonymous'}</strong><br>${entry.Wishes}`;
             container.appendChild(wish);
           }
