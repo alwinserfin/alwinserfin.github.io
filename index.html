@@ -172,11 +172,14 @@
         container.innerHTML = "";
 
         data.forEach((entry, index) => {
-          if (entry.Wishes && entry.Wishes.trim() !== "") {
+          const wishText = entry["Wishes For The Couple"]?.trim();
+          const guestName = entry["Full Name"]?.trim();
+
+          if (wishText && wishText !== "") {
             const wish = document.createElement("div");
             wish.className = "wish-entry";
             wish.style.animationDelay = `${index * 0.2}s`;
-            wish.innerHTML = `<strong>${entry.Name || 'Anonymous'}</strong><br>${entry["Wishes For The Couple"]}`;
+            wish.innerHTML = `<strong>${guestName || 'Anonymous'}</strong><br>${wishText}`;
             container.appendChild(wish);
           }
         });
