@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alwin & Serfin Wedding Invitation</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to top, #fff8f0, #d7f5e8);
+      background-image: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-repeat: no-repeat;
+      color: #333;
+    }
+    .overlay {
+      background: rgba(255,255,255,0.85);
+      padding: 2rem;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      text-align: center;
+    }
+    h1 {
+      font-size: 3em;
+      margin-bottom: 0.2em;
+    }
+    h2 {
+      font-weight: normal;
+      margin-bottom: 2em;
+    }
+    .details {
+      font-size: 1.1em;
+      margin-bottom: 2em;
+    }
+    .rsvp, .wishes-board {
+      background: #ffffffcc;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1em;
+    }
+    button {
+      padding: 0.75rem 1.5rem;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+    .footer {
+      margin-top: 3rem;
+      font-size: 0.9em;
+      color: #666;
+    }
+    .wish-entry {
+      background: #f9f9f9;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      text-align: left;
+      box-shadow: 0 0 4px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <div class="container">
+      <h1>Alwin & Serfin</h1>
+      <h2>Invite you to celebrate their wedding</h2>
+      <div class="details">
+        <p><strong>Date:</strong> Saturday, May 30, 2026</p>
+        <p><strong>Time:</strong> 6:00 PM</p>
+        <p><strong>Location:</strong> Royal Avilla, Lombok</p>
+        <p><strong>Dress Code:</strong> No batik, suits only</p>
+      </div>
+
+      <div class="rsvp">
+        <h2>RSVP</h2>
+        <form name="rsvp" method="POST" data-netlify="true">
+          <label>Full Name:</label>
+          <input type="text" name="name" required>
+
+          <label>Phone Number:</label>
+          <input type="tel" name="phone" required>
+
+          <label>Will you attend?</label>
+          <select name="attending" required>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+
+          <label>Number of People Attending:</label>
+          <select name="guests" required>
+            <option value="1">1</option>
+            <option value="2">2</option>
+          </select>
+
+          <label>Wishes for the couple:</label>
+          <textarea name="wishes" rows="3"></textarea>
+
+          <label>Dietary Restrictions:</label>
+          <textarea name="diet" rows="2"></textarea>
+
+          <button type="submit">Send RSVP</button>
+        </form>
+      </div>
+
+      <div class="wishes-board">
+        <h2>Wishes from Friends & Family 💌</h2>
+        <div id="wishes-container">Loading wishes...</div>
+      </div>
+
+      <div class="footer">
+        <p>We can't wait to celebrate with you! 🌴💍</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    fetch("https://sheet2api.com/v1/73FiRFSBSXeh/guest-list-wedding")
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById("wishes-container");
+        container.innerHTML = "";
+
+        data.forEach(entry => {
+          if (entry.Wishes && entry.Wishes.trim() !== "") {
+            const wish = document.createElement("div");
+            wish.className = "wish-entry";
+            wish.innerHTML = `<strong>${entry.Name || 'Anonymous'}</strong><br>${entry.Wishes}`;
+            container.appendChild(wish);
+          }
+        });
+
+        if (container.innerHTML.trim() === "") {
+          container.innerHTML = "No wishes submitted yet.";
+        }
+      })
+      .catch(error => {
+        document.getElementById("wishes-container").innerText = "Could not load wishes.";
+        console.error("Error loading wishes:", error);
+      });
+  </script>
+</body>
+</html>
