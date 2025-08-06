@@ -172,8 +172,8 @@
         container.innerHTML = "";
 
         data.forEach((entry, index) => {
-          const wishText = entry["Wishes For The Couple"]?.trim();
-          const guestName = entry["Full Name"]?.trim();
+          const wishText = entry["Wishes For The Couple"]?.toString().trim();
+          const guestName = entry["Full Name"]?.toString().trim();
 
           if (wishText && wishText !== "") {
             const wish = document.createElement("div");
