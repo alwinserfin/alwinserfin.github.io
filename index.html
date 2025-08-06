@@ -27,30 +27,30 @@
     h1 {
       font-size: 3em;
       margin-bottom: 0.2em;
+      animation: fadeInScale 1.5s ease-in-out forwards;
     }
     h2 {
       font-weight: normal;
       margin-bottom: 2em;
+      animation: fadeIn 2s ease forwards;
     }
     .details {
       font-size: 1.1em;
       margin-bottom: 2em;
+      animation: slideUp 1s ease-out forwards;
     }
     .form-embed, .wishes-board, .photo-section {
       background: #ffffffcc;
       padding: 2rem;
       border-radius: 12px;
       margin-bottom: 2rem;
-    }
-    iframe {
-      width: 100%;
-      height: 1000px;
-      border: none;
+      animation: fadeInUp 1s ease-out forwards;
     }
     .footer {
       margin-top: 3rem;
       font-size: 0.9em;
       color: #666;
+      animation: fadeIn 2s ease forwards;
     }
     .wish-entry {
       background: #f9f9f9;
@@ -61,7 +61,7 @@
       box-shadow: 0 0 4px rgba(0,0,0,0.1);
       opacity: 0;
       transform: translateY(20px);
-      animation: fadeInUp 1s ease forwards;
+      animation: fadeInBounce 1s ease forwards;
     }
     .photo-gallery {
       display: grid;
@@ -79,6 +79,7 @@
       color: #777;
       font-style: italic;
       border-radius: 8px;
+      animation: fadeIn 2s ease forwards;
     }
     .fade-in {
       opacity: 0;
@@ -88,6 +89,34 @@
       opacity: 0;
       transform: translateY(30px);
       animation: slideUp 1s ease-out forwards;
+    }
+    .thank-you {
+      display: none;
+      margin-top: 1rem;
+      font-size: 1.2em;
+      color: #3c6e71;
+      animation: fadeInScale 1s ease-in-out forwards;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+    }
+    button {
+      background-color: #3c6e71;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #2e5254;
     }
     @keyframes fadeIn {
       to {
@@ -106,6 +135,32 @@
         transform: translateY(0);
       }
     }
+    @keyframes fadeInScale {
+      0% {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    @keyframes fadeInBounce {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      60% {
+        transform: translateY(-10px);
+      }
+      80% {
+        transform: translateY(5px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
     @media (max-width: 600px) {
       .overlay {
         padding: 1rem;
@@ -118,9 +173,6 @@
       }
       .details p {
         font-size: 1em;
-      }
-      iframe {
-        height: 700px;
       }
     }
   </style>
@@ -136,9 +188,7 @@
       const playPromise = audio.play();
 
       if (playPromise !== undefined) {
-        playPromise.then(() => {
-          // Autoplay started
-        }).catch(error => {
+        playPromise.catch(() => {
           console.warn("Autoplay was blocked. User interaction required.");
         });
       }
@@ -167,7 +217,24 @@
 
       <div class="form-embed slide-up">
         <h2>RSVP Form</h2>
-        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfVeiNj53g5Bdu0ZwnNk1gbhrOvi1UHZ3lTBEJiKV6Iw3-hJA/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+        <form id="rsvp-form">
+          <input type="text" name="Full Name" placeholder="Your Full Name" required>
+          <input type="tel" name="Phone Numbers" placeholder="Your Phone Number" required>
+          <select name="Will You Attend" required>
+            <option value="">Will you attend?</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+          <select name="Number Of People">
+            <option value="">Number of People Attending</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+          </select>
+          <textarea name="Wishes For The Couple" placeholder="Your wishes for the couple..."></textarea>
+          <textarea name="Dietary Restrictions" placeholder="Any dietary restrictions?"></textarea>
+          <button type="submit">Send RSVP</button>
+        </form>
+        <div class="thank-you" id="thank-you">🎉 Thank you for RSVPing! We can’t wait to see you! 💕</div>
       </div>
 
       <div class="wishes-board slide-up">
@@ -182,6 +249,34 @@
   </div>
 
   <script>
+    const form = document.getElementById("rsvp-form");
+    const thankYou = document.getElementById("thank-you");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const json = {};
+      formData.forEach((value, key) => json[key] = value);
+
+      fetch("https://script.google.com/macros/s/AKfycbxSba-ciMH7NJj4VZqEe8mYHWp1-xXr0smzSd3LctYh6sBi8T0UgcRVAsBdgfEIaFAB/exec", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(json)
+      })
+        .then(res => res.json())
+        .then(() => {
+          form.reset();
+          thankYou.style.display = 'block';
+        })
+        .catch(err => {
+          alert("Something went wrong. Please try again later.");
+          console.error(err);
+        });
+    });
+
     fetch("https://script.google.com/macros/s/AKfycbxSba-ciMH7NJj4VZqEe8mYHWp1-xXr0smzSd3LctYh6sBi8T0UgcRVAsBdgfEIaFAB/exec")
       .then(response => response.json())
       .then(data => {
@@ -196,7 +291,7 @@
             const wish = document.createElement("div");
             wish.className = "wish-entry";
             wish.style.animationDelay = `${index * 0.2}s`;
-            wish.innerHTML = `${guestName || 'Anonymous'} - ${wishText}`;
+            wish.innerHTML = `<strong>${guestName || 'Anonymous'}</strong> - ${wishText}`;
             container.appendChild(wish);
           }
         });
