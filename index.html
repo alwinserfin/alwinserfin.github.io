@@ -27,30 +27,25 @@
     h1 {
       font-size: 3em;
       margin-bottom: 0.2em;
-      animation: fadeInScale 1.5s ease-in-out forwards;
     }
     h2 {
       font-weight: normal;
       margin-bottom: 2em;
-      animation: fadeIn 2s ease forwards;
     }
     .details {
       font-size: 1.1em;
       margin-bottom: 2em;
-      animation: slideUp 1s ease-out forwards;
     }
-    .form-embed, .wishes-board, .photo-section {
+    .form-section, .wishes-board, .photo-section {
       background: #ffffffcc;
       padding: 2rem;
       border-radius: 12px;
       margin-bottom: 2rem;
-      animation: fadeInUp 1s ease-out forwards;
     }
     .footer {
       margin-top: 3rem;
       font-size: 0.9em;
       color: #666;
-      animation: fadeIn 2s ease forwards;
     }
     .wish-entry {
       background: #f9f9f9;
@@ -61,7 +56,7 @@
       box-shadow: 0 0 4px rgba(0,0,0,0.1);
       opacity: 0;
       transform: translateY(20px);
-      animation: fadeInBounce 1s ease forwards;
+      animation: fadeInUp 1s ease forwards;
     }
     .photo-gallery {
       display: grid;
@@ -79,7 +74,6 @@
       color: #777;
       font-style: italic;
       border-radius: 8px;
-      animation: fadeIn 2s ease forwards;
     }
     .fade-in {
       opacity: 0;
@@ -89,34 +83,6 @@
       opacity: 0;
       transform: translateY(30px);
       animation: slideUp 1s ease-out forwards;
-    }
-    .thank-you {
-      display: none;
-      margin-top: 1rem;
-      font-size: 1.2em;
-      color: #3c6e71;
-      animation: fadeInScale 1s ease-in-out forwards;
-    }
-    input, select, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 1rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 1em;
-    }
-    button {
-      background-color: #3c6e71;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-size: 1em;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #2e5254;
     }
     @keyframes fadeIn {
       to {
@@ -135,45 +101,32 @@
         transform: translateY(0);
       }
     }
-    @keyframes fadeInScale {
-      0% {
-        opacity: 0;
-        transform: scale(0.9);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
+    form label {
+      display: block;
+      margin: 0.5rem 0 0.25rem;
+      text-align: left;
     }
-    @keyframes fadeInBounce {
-      0% {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      60% {
-        transform: translateY(-10px);
-      }
-      80% {
-        transform: translateY(5px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    form input, form select, form textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
-    @media (max-width: 600px) {
-      .overlay {
-        padding: 1rem;
-      }
-      h1 {
-        font-size: 2em;
-      }
-      h2 {
-        font-size: 1.2em;
-      }
-      .details p {
-        font-size: 1em;
-      }
+    form button {
+      padding: 0.75rem 2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #2c7a7b;
+      color: white;
+      cursor: pointer;
+    }
+    #thank-you {
+      display: none;
+      font-size: 1.1em;
+      color: green;
+      margin-top: 1rem;
     }
   </style>
 </head>
@@ -182,18 +135,6 @@
     <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const audio = document.getElementById("wedding-audio");
-      const playPromise = audio.play();
-
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          console.warn("Autoplay was blocked. User interaction required.");
-        });
-      }
-    });
-  </script>
   <div class="overlay">
     <div class="container">
       <h1 class="fade-in">Alwin & Serfin</h1>
@@ -212,29 +153,39 @@
           <div class="photo-placeholder">Photo 2 Placeholder</div>
           <div class="photo-placeholder">Photo 3 Placeholder</div>
         </div>
-        <p style="margin-top:1rem; font-size: 0.9em; color: #555;">Upload your photos later by replacing these placeholders with real images.</p>
       </div>
 
-      <div class="form-embed slide-up">
+      <div class="form-section slide-up">
         <h2>RSVP Form</h2>
         <form id="rsvp-form">
-          <input type="text" name="Full Name" placeholder="Your Full Name" required>
-          <input type="tel" name="Phone Numbers" placeholder="Your Phone Number" required>
-          <select name="Will You Attend" required>
-            <option value="">Will you attend?</option>
+          <label for="name">Full Name:</label>
+          <input type="text" id="name" name="Full Name" required>
+
+          <label for="phone">Phone Number:</label>
+          <input type="tel" id="phone" name="Phone Numbers" required>
+
+          <label for="attendance">Will you attend?</label>
+          <select id="attendance" name="Will You Attend" required>
+            <option value="">Select</option>
             <option value="Yes">Yes</option>
             <option value="No">No</option>
           </select>
-          <select name="Number Of People">
-            <option value="">Number of People Attending</option>
+
+          <label for="people">Number of People Attending:</label>
+          <select id="people" name="Number Of People" required>
             <option value="1">1</option>
             <option value="2">2</option>
           </select>
-          <textarea name="Wishes For The Couple" placeholder="Your wishes for the couple..."></textarea>
-          <textarea name="Dietary Restrictions" placeholder="Any dietary restrictions?"></textarea>
+
+          <label for="wishes">Wishes for the Couple:</label>
+          <textarea id="wishes" name="Wishes For The Couple" rows="3"></textarea>
+
+          <label for="diet">Dietary Restrictions:</label>
+          <input type="text" id="diet" name="Dietary Restrictions">
+
           <button type="submit">Send RSVP</button>
         </form>
-        <div class="thank-you" id="thank-you">🎉 Thank you for RSVPing! We can’t wait to see you! 💕</div>
+        <div id="thank-you">Thank you for your RSVP! 🎉</div>
       </div>
 
       <div class="wishes-board slide-up">
@@ -259,22 +210,27 @@
       const json = {};
       formData.forEach((value, key) => json[key] = value);
 
-      fetch("https://script.google.com/macros/s/AKfycbxSba-ciMH7NJj4VZqEe8mYHWp1-xXr0smzSd3LctYh6sBi8T0UgcRVAsBdgfEIaFAB/exec", {
+      fetch("https://sheetdb.io/api/v1/4e3p3gyhynzah", {
         method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Accept": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify(json)
+        body: JSON.stringify({ data: [json] })
       })
-        .then(res => res.json())
-        .then(() => {
+      .then(res => res.json())
+      .then(responseData => {
+        if (responseData.created) {
           form.reset();
           thankYou.style.display = 'block';
-        })
-        .catch(err => {
+        } else {
           alert("Something went wrong. Please try again later.");
-          console.error(err);
-        });
+        }
+      })
+      .catch(err => {
+        alert("Something went wrong. Please try again later.");
+        console.error(err);
+      });
     });
 
     fetch("https://script.google.com/macros/s/AKfycbxSba-ciMH7NJj4VZqEe8mYHWp1-xXr0smzSd3LctYh6sBi8T0UgcRVAsBdgfEIaFAB/exec")
@@ -284,8 +240,8 @@
         container.innerHTML = "";
 
         data.forEach((entry, index) => {
-          const wishText = entry["Wishes For The Couple"]?.toString().trim();
-          const guestName = entry["Full Name"]?.toString().trim();
+          const wishText = entry["Wishes For The Couple"]?.trim();
+          const guestName = entry["Full Name"]?.trim();
 
           if (wishText && wishText !== "") {
             const wish = document.createElement("div");
