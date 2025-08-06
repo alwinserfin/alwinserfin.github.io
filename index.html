@@ -42,10 +42,28 @@
       border-radius: 12px;
       margin-bottom: 2rem;
     }
-    iframe {
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+    input, select, textarea, button {
       width: 100%;
-      height: 1000px;
-      border: none;
+      max-width: 400px;
+      padding: 0.75rem;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      background-color: #00796b;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #005f56;
     }
     .footer {
       margin-top: 3rem;
@@ -106,27 +124,12 @@
         transform: translateY(0);
       }
     }
+    .wishes-board div {
+      transition: opacity 1s ease-in-out;
+    }
   </style>
 </head>
 <body>
-  <audio id="wedding-audio" autoplay controls loop style="position: fixed; bottom: 20px; right: 20px; z-index: 999;">
-    <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const audio = document.getElementById("wedding-audio");
-      const playPromise = audio.play();
-
-      if (playPromise !== undefined) {
-        playPromise.then(() => {
-          // Autoplay started
-        }).catch(error => {
-          console.warn("Autoplay was blocked. User interaction required.");
-        });
-      }
-    });
-  </script>
   <div class="overlay">
     <div class="container">
       <h1 class="fade-in">Alwin & Serfin</h1>
@@ -138,32 +141,21 @@
         <p><strong>Dress Code:</strong> No batik, suits only</p>
       </div>
 
-      <div class="photo-section slide-up">
-        <h2>Our Love Story in Pictures 📸</h2>
-        <div class="photo-gallery">
-          <div class="photo-placeholder">Photo 1 Placeholder</div>
-          <div class="photo-placeholder">Photo 2 Placeholder</div>
-          <div class="photo-placeholder">Photo 3 Placeholder</div>
-        </div>
-        <p style="margin-top:1rem; font-size: 0.9em; color: #555;">Upload your photos later by replacing these placeholders with real images.</p>
-      </div>
-
       <div class="form-embed slide-up">
         <h2>RSVP Form</h2>
         <form id="rsvp-form">
-          <input type="text" name="Full Name" placeholder="Full Name" required />
-          <input type="tel" name="Phone Numbers" placeholder="Phone Number" required />
-          <select name="Will You Attend" required>
+          <input type="text" id="name" placeholder="Full Name" required />
+          <input type="text" id="phone" placeholder="Phone Number" required />
+          <select id="attendance" required>
             <option value="">Will you attend?</option>
             <option value="Yes">Yes</option>
             <option value="No">No</option>
           </select>
-          <select name="Number Of People" required>
-            <option value="">Number of people attending</option>
+          <select id="number">
             <option value="1">1</option>
             <option value="2">2</option>
           </select>
-          <textarea name="Wishes For The Couple" placeholder="Wishes for the couple"></textarea>
+          <textarea id="wishes" placeholder="Wishes for the couple"></textarea>
           <button type="submit">Send RSVP</button>
         </form>
       </div>
@@ -180,50 +172,67 @@
   </div>
 
   <script>
-    const form = document.getElementById('rsvp-form');
-    form.addEventListener('submit', async (e) => {
+    document.getElementById("rsvp-form").addEventListener("submit", function (e) {
       e.preventDefault();
-      const formData = new FormData(form);
-      const data = {};
-      formData.forEach((value, key) => data[key] = value);
 
-      try {
-        await fetch("https://sheetdb.io/api/v1/4e3p3gyhynzah", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ data: [data] })
+      const payload = {
+        data: {
+          "Full Name": document.getElementById("name").value,
+          "Phone Numbers": document.getElementById("phone").value,
+          "Will You Attend": document.getElementById("attendance").value,
+          "Number Of People": document.getElementById("number").value,
+          "Wishes For The Couple": document.getElementById("wishes").value
+        }
+      };
+
+      fetch("https://sheetdb.io/api/v1/4e3p3gyhynzah", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      })
+        .then(res => {
+          if (res.ok) {
+            window.location.href = "thankyou.html";
+          } else {
+            alert("Something went wrong. Please try again.");
+          }
         });
-
-        window.location.href = "thankyou.html";
-      } catch (err) {
-        alert("Something went wrong. Please try again later.");
-        console.error(err);
-      }
     });
+
+    let wishes = [];
+    let displayIndex = 0;
+
+    function displayWishes() {
+      const container = document.getElementById("wishes-container");
+      container.innerHTML = "";
+
+      const toShow = wishes.slice(displayIndex, displayIndex + 3);
+      toShow.forEach(entry => {
+        const wishText = entry["Wishes For The Couple"]?.trim();
+        const guestName = entry["Full Name"]?.trim();
+
+        if (wishText) {
+          const div = document.createElement("div");
+          div.className = "wish-entry";
+          div.innerHTML = `<strong>${guestName || 'Anonymous'}</strong> - ${wishText}`;
+          container.appendChild(div);
+        }
+      });
+
+      displayIndex = (displayIndex + 3) % wishes.length;
+    }
 
     fetch("https://sheetdb.io/api/v1/4e3p3gyhynzah")
       .then(response => response.json())
       .then(data => {
-        const container = document.getElementById("wishes-container");
-        container.innerHTML = "";
-
-        data.forEach((entry, index) => {
-          const wishText = entry["Wishes For The Couple"]?.trim();
-          const guestName = entry["Full Name"]?.trim();
-
-          if (wishText && wishText !== "") {
-            const wish = document.createElement("div");
-            wish.className = "wish-entry";
-            wish.style.animationDelay = `${index * 0.2}s`;
-            wish.innerHTML = `<strong>${guestName || 'Anonymous'}</strong> - ${wishText}`;
-            container.appendChild(wish);
-          }
-        });
-
-        if (container.innerHTML.trim() === "") {
-          container.innerHTML = "No wishes submitted yet.";
+        wishes = data.filter(entry => entry["Wishes For The Couple"]?.trim());
+        if (wishes.length === 0) {
+          document.getElementById("wishes-container").innerText = "No wishes submitted yet.";
+        } else {
+          displayWishes();
+          setInterval(displayWishes, 6000); // rotate every 6 seconds
         }
       })
       .catch(error => {
