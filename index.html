@@ -36,230 +36,95 @@
       font-size: 1.1em;
       margin-bottom: 2em;
     }
-    .form-section, .wishes-board, .photo-section {
+    .form-embed {
       background: #ffffffcc;
       padding: 2rem;
       border-radius: 12px;
       margin-bottom: 2rem;
+    }
+    input, textarea, select, button {
+      display: block;
+      margin: 0.5rem auto;
+      padding: 0.5rem;
+      font-size: 1rem;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      background: #2c7a7b;
+      color: white;
+      border: none;
+      cursor: pointer;
     }
     .footer {
       margin-top: 3rem;
       font-size: 0.9em;
       color: #666;
     }
-    .wish-entry {
-      background: #f9f9f9;
-      padding: 1rem;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-      text-align: left;
-      box-shadow: 0 0 4px rgba(0,0,0,0.1);
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 1s ease forwards;
-    }
-    .photo-gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1rem;
-    }
-    .photo-placeholder {
-      width: 100%;
-      height: 200px;
-      background-color: #eee;
-      border: 2px dashed #ccc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #777;
-      font-style: italic;
-      border-radius: 8px;
-    }
-    .fade-in {
-      opacity: 0;
-      animation: fadeIn 2s ease forwards;
-    }
-    .slide-up {
-      opacity: 0;
-      transform: translateY(30px);
-      animation: slideUp 1s ease-out forwards;
-    }
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
-    }
-    @keyframes slideUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    form label {
-      display: block;
-      margin: 0.5rem 0 0.25rem;
-      text-align: left;
-    }
-    form input, form select, form textarea {
-      width: 100%;
-      padding: 0.5rem;
-      margin-bottom: 1rem;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    form button {
-      padding: 0.75rem 2rem;
-      font-size: 1rem;
-      border: none;
-      border-radius: 8px;
-      background-color: #2c7a7b;
-      color: white;
-      cursor: pointer;
-    }
-    #thank-you {
-      display: none;
-      font-size: 1.1em;
-      color: green;
-      margin-top: 1rem;
-    }
   </style>
 </head>
 <body>
-  <audio id="wedding-audio" autoplay controls loop style="position: fixed; bottom: 20px; right: 20px; z-index: 999;">
-    <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
   <div class="overlay">
     <div class="container">
-      <h1 class="fade-in">Alwin & Serfin</h1>
-      <h2 class="fade-in">Invite you to celebrate their wedding</h2>
-      <div class="details slide-up">
+      <h1>Alwin & Serfin</h1>
+      <h2>Invite you to celebrate their wedding</h2>
+      <div class="details">
         <p><strong>Date:</strong> Saturday, May 30, 2026</p>
         <p><strong>Time:</strong> 6:00 PM</p>
         <p><strong>Location:</strong> Royal Avilla, Lombok</p>
         <p><strong>Dress Code:</strong> No batik, suits only</p>
       </div>
 
-      <div class="photo-section slide-up">
-        <h2>Our Love Story in Pictures 📸</h2>
-        <div class="photo-gallery">
-          <div class="photo-placeholder">Photo 1 Placeholder</div>
-          <div class="photo-placeholder">Photo 2 Placeholder</div>
-          <div class="photo-placeholder">Photo 3 Placeholder</div>
-        </div>
-      </div>
-
-      <div class="form-section slide-up">
+      <div class="form-embed">
         <h2>RSVP Form</h2>
         <form id="rsvp-form">
-          <label for="name">Full Name:</label>
-          <input type="text" id="name" name="Full Name" required>
-
-          <label for="phone">Phone Number:</label>
-          <input type="tel" id="phone" name="Phone Numbers" required>
-
-          <label for="attendance">Will you attend?</label>
-          <select id="attendance" name="Will You Attend" required>
-            <option value="">Select</option>
+          <input type="text" name="Full Name" placeholder="Full Name" required />
+          <input type="tel" name="Phone Numbers" placeholder="Phone Number" required />
+          <select name="Will You Attend" required>
+            <option value="">Will you attend?</option>
             <option value="Yes">Yes</option>
             <option value="No">No</option>
           </select>
-
-          <label for="people">Number of People Attending:</label>
-          <select id="people" name="Number Of People" required>
+          <select name="Number Of People" required>
+            <option value="">Number of people attending</option>
             <option value="1">1</option>
             <option value="2">2</option>
           </select>
-
-          <label for="wishes">Wishes for the Couple:</label>
-          <textarea id="wishes" name="Wishes For The Couple" rows="3"></textarea>
-
-          <label for="diet">Dietary Restrictions:</label>
-          <input type="text" id="diet" name="Dietary Restrictions">
-
+          <textarea name="Wishes For The Couple" placeholder="Wishes for the couple"></textarea>
           <button type="submit">Send RSVP</button>
         </form>
-        <div id="thank-you">Thank you for your RSVP! 🎉</div>
       </div>
 
-      <div class="wishes-board slide-up">
-        <h2>Wishes from Friends & Family 💌</h2>
-        <div id="wishes-container">Loading wishes...</div>
-      </div>
-
-      <div class="footer fade-in">
+      <div class="footer">
         <p>We can't wait to celebrate with you! 🌴💍</p>
       </div>
     </div>
   </div>
 
   <script>
-    const form = document.getElementById("rsvp-form");
-    const thankYou = document.getElementById("thank-you");
-
-    form.addEventListener("submit", function (e) {
+    const form = document.getElementById('rsvp-form');
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-
       const formData = new FormData(form);
-      const json = {};
-      formData.forEach((value, key) => json[key] = value);
+      const data = {};
+      formData.forEach((value, key) => data[key] = value);
 
-      fetch("https://sheetdb.io/api/v1/4e3p3gyhynzah", {
-        method: "POST",
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ data: [json] })
-      })
-      .then(res => res.json())
-      .then(responseData => {
-        if (responseData.created) {
-          form.reset();
-          thankYou.style.display = 'block';
-        } else {
-          alert("Something went wrong. Please try again later.");
-        }
-      })
-      .catch(err => {
-        alert("Something went wrong. Please try again later.");
-        console.error(err);
-      });
-    });
-
-    fetch("https://script.google.com/macros/s/AKfycbxSba-ciMH7NJj4VZqEe8mYHWp1-xXr0smzSd3LctYh6sBi8T0UgcRVAsBdgfEIaFAB/exec")
-      .then(response => response.json())
-      .then(data => {
-        const container = document.getElementById("wishes-container");
-        container.innerHTML = "";
-
-        data.forEach((entry, index) => {
-          const wishText = entry["Wishes For The Couple"]?.trim();
-          const guestName = entry["Full Name"]?.trim();
-
-          if (wishText && wishText !== "") {
-            const wish = document.createElement("div");
-            wish.className = "wish-entry";
-            wish.style.animationDelay = `${index * 0.2}s`;
-            wish.innerHTML = `<strong>${guestName || 'Anonymous'}</strong> - ${wishText}`;
-            container.appendChild(wish);
-          }
+      try {
+        await fetch("https://sheetdb.io/api/v1/4e3p3gyhynzah", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ data: [data] })
         });
 
-        if (container.innerHTML.trim() === "") {
-          container.innerHTML = "No wishes submitted yet.";
-        }
-      })
-      .catch(error => {
-        document.getElementById("wishes-container").innerText = "Could not load wishes.";
-        console.error("Error loading wishes:", error);
-      });
+        window.location.href = "thank-you.html";
+      } catch (err) {
+        alert("Something went wrong. Please try again later.");
+        console.error(err);
+      }
+    });
   </script>
 </body>
 </html>
