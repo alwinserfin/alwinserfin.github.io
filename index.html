@@ -27,6 +27,7 @@
       justify-content: center;
       text-align: center;
       z-index: 9999;
+      transition: opacity 1s ease;
     }
     #door-panel {
       width: 70%;
@@ -39,7 +40,7 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: transform 1.5s ease;
+      transition: transform 1.5s ease, opacity 1s ease;
     }
     #door-panel.open {
       transform: scale(2) translateY(-200%);
@@ -57,6 +58,10 @@
       background: rgba(0,0,0,0.55);
       padding: 1rem;
       text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(5px);
     }
     nav a {
       margin: 0 1rem;
@@ -220,27 +225,100 @@
   </section>
 
   <script>
-    /* Door Opening Logic */
+    /* ------------------------------
+       DOOR TAP TO ENTER
+    ------------------------------ */
     const door = document.getElementById("door-panel");
     const intro = document.getElementById("intro-door");
     const bgMusic = document.getElementById("bg-music");
     const doorSound = document.getElementById("door-sound");
 
-    door.addEventListener("click", () => {
-      doorSound.play();
-      door.classList.add("open");
-      setTimeout(() => {
-        intro.style.opacity = 0;
-        setTimeout(() => intro.style.display = "none", 1000);
-        bgMusic.play();
-      }, 800);
+    // Works on mobile + desktop
+    intro.addEventListener("click", () => {
+      if (!door.classList.contains("open")) {
+        doorSound.play();
+        door.classList.add("open");
+
+        setTimeout(() => {
+          intro.style.opacity = 0;
+          setTimeout(() => intro.style.display = "none", 900);
+          bgMusic.play();
+        }, 800);
+      }
     });
 
-    /* Load Wishes */
+    /* ------------------------------
+       LOAD WISHES FROM SHEETDB
+    ------------------------------ */
     const wishesBox = document.getElementById("wishes-box");
     let wishes = [];
     let currentIndex = 0;
 
     fetch("https://sheetdb.io/api/v1/4e3p3gyhynzah")
-      .then(r => r.json())
+      .then(res => res.json())
       .then(data => {
+        wishes = data
+          .filter(row => row.Name || row.Wishes)
+          .map(row => `<b>${row.Name || "Anonymous"}</b>: ${row.Wishes || ""}`);
+
+        if (wishes.length === 0) {
+          wishesBox.innerHTML = "No wishes yet.";
+          return;
+        }
+
+        // Start rotating
+        showWish();
+        setInterval(showWish, 4000);
+      });
+
+    function showWish() {
+      wishesBox.classList.remove("fade");
+
+      setTimeout(() => {
+        wishesBox.innerHTML = wishes[currentIndex];
+        wishesBox.classList.add("fade");
+        currentIndex = (currentIndex + 1) % wishes.length;
+      }, 100);
+    }
+
+    /* ------------------------------
+       SUBMIT RSVP
+    ------------------------------ */
+    function submitRSVP() {
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const attend = document.getElementById("attend").value;
+      const people = document.getElementById("people").value;
+      const wishesInput = document.getElementById("wishes-input").value.trim();
+
+      if (!name) {
+        alert("Please enter your name.");
+        return;
+      }
+
+      fetch("https://sheetdb.io/api/v1/4e3p3gyhynzah", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          data: [{
+            Name: name,
+            Phone: phone,
+            Attendance: attend,
+            People: people,
+            Wishes: wishesInput
+          }]
+        })
+      })
+      .then(r => r.json())
+      .then(() => {
+        document.querySelector(".rsvp-box").style.display = "none";
+        const msg = document.getElementById("thankyou-message");
+        msg.innerHTML = `Thank you for confirming, <b>${name}</b> ♥`;
+        msg.style.display = "block";
+      })
+      .catch(() => alert("Something went wrong. Please try again."));
+    }
+  </script>
+
+</body>
+</html>
