@@ -6,239 +6,241 @@
   <title>Alwin & Serfin Wedding Invitation</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      padding: 0;
-      background: linear-gradient(to top, #fff8f0, #d7f5e8);
-      background-size: cover;
-      background-repeat: no-repeat;
-      color: #333;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0b0b0c;
+      color: #f5f5f5;
+      overflow-x: hidden;
     }
-    .overlay {
-      background: rgba(255,255,255,0.85);
-      padding: 2rem;
-      min-height: 100vh;
-    }
-    .container {
-      max-width: 800px;
-      margin: auto;
-      text-align: center;
-    }
-    h1 {
-      font-size: 3em;
-      margin-bottom: 0.2em;
-    }
-    h2 {
-      font-weight: normal;
-      margin-bottom: 2em;
-    }
-    .details {
-      font-size: 1.1em;
-      margin-bottom: 2em;
-    }
-    .form-embed, .wishes-board, .photo-section {
-      background: #ffffffcc;
-      padding: 2rem;
-      border-radius: 12px;
-      margin-bottom: 2rem;
-    }
-    form {
+
+    /* Intro Door Screen */
+    #intro-door {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1rem;
+      justify-content: center;
+      text-align: center;
+      z-index: 9999;
     }
-    input, select, textarea, button {
-      width: 100%;
-      max-width: 400px;
-      padding: 0.75rem;
-      font-size: 1em;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    button {
-      background-color: #00796b;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #005f56;
-    }
-    .footer {
-      margin-top: 3rem;
-      font-size: 0.9em;
-      color: #666;
-    }
-    .wish-entry {
-      background: #f9f9f9;
-      padding: 1rem;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-      text-align: left;
-      box-shadow: 0 0 4px rgba(0,0,0,0.1);
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 1s ease forwards;
-    }
-    .photo-gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1rem;
-    }
-    .photo-placeholder {
-      width: 100%;
-      height: 200px;
-      background-color: #eee;
-      border: 2px dashed #ccc;
+    #door-panel {
+      width: 70%;
+      max-width: 500px;
+      height: 300px;
+      background: linear-gradient(145deg, #1a1a1a, #000000);
+      border: 3px solid gold;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #777;
-      font-style: italic;
+      cursor: pointer;
+      transition: transform 1.5s ease;
+    }
+    #door-panel.open {
+      transform: scale(2) translateY(-200%);
+      opacity: 0;
+    }
+    #intro-text {
+      font-size: 1.4rem;
+      margin-top: 20px;
+      color: gold;
+    }
+
+    /* Navigation */
+    nav {
+      width: 100%;
+      background: rgba(0,0,0,0.55);
+      padding: 1rem;
+      text-align: center;
+    }
+    nav a {
+      margin: 0 1rem;
+      color: gold;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    /* Sections */
+    section {
+      padding: 2.5rem 1.5rem;
+      max-width: 900px;
+      margin: auto;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      margin-top: 2rem;
+    }
+
+    h2 {
+      color: gold;
+      text-align: center;
+    }
+
+    /* Gallery */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .gallery-grid img {
+      width: 100%;
+      border-radius: 10px;
+      border: 2px solid gold;
+    }
+
+    /* Wishes */
+    #wishes-box {
+      min-height: 150px;
+      text-align: center;
+      font-size: 1.2rem;
+      padding: 1rem;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid gold;
+    }
+    .fade {
+      animation: fadeCycle 2s ease-in-out;
+    }
+    @keyframes fadeCycle {
+      0% { opacity: 0; }
+      50% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    /* RSVP */
+    #thankyou-message {
+      display: none;
+      text-align: center;
+      color: gold;
+      font-size: 1.3rem;
+      margin-top: 1rem;
+    }
+    .rsvp-box input, select, textarea {
+      width: 100%;
+      padding: 0.8rem;
+      margin-top: 0.7rem;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid gold;
       border-radius: 8px;
+      color: white;
+      font-size: 1rem;
     }
-    .fade-in {
-      opacity: 0;
-      animation: fadeIn 2s ease forwards;
+    .rsvp-btn {
+      margin-top: 1rem;
+      padding: 1rem;
+      width: 100%;
+      background: gold;
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
     }
-    .slide-up {
-      opacity: 0;
-      transform: translateY(30px);
-      animation: slideUp 1s ease-out forwards;
-    }
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
-    }
-    @keyframes slideUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    .wishes-board div {
-      transition: opacity 1s ease-in-out;
-    }
+
+    audio { display: none; }
   </style>
 </head>
 <body>
-  <div class="overlay">
-    <div class="container">
-      <h1 class="fade-in">Alwin & Serfin</h1>
-      <h2 class="fade-in">Invite you to celebrate their wedding</h2>
-      <div class="details slide-up">
-        <p><strong>Date:</strong> Saturday, May 30, 2026</p>
-        <p><strong>Time:</strong> 6:00 PM</p>
-        <p><strong>Location:</strong> Royal Avilla, Lombok</p>
-        <p><strong>Dress Code:</strong> No batik, suits only</p>
-      </div>
 
-      <div class="form-embed slide-up">
-        <h2>RSVP Form</h2>
-        <form id="rsvp-form">
-          <input type="text" id="name" placeholder="Full Name" required />
-          <input type="text" id="phone" placeholder="Phone Number" required />
-          <select id="attendance" required>
-            <option value="">Will you attend?</option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-          </select>
-          <select id="number">
-            <option value="1">1</option>
-            <option value="2">2</option>
-          </select>
-          <textarea id="wishes" placeholder="Wishes for the couple"></textarea>
-          <button type="submit">Send RSVP</button>
-        </form>
-      </div>
-
-      <div class="wishes-board slide-up">
-        <h2>Wishes from Friends & Family 💌</h2>
-        <div id="wishes-container">Loading wishes...</div>
-      </div>
-
-      <div class="footer fade-in">
-        <p>We can't wait to celebrate with you! 🌴💍</p>
-      </div>
+  <!-- Door Intro Screen -->
+  <div id="intro-door">
+    <div id="door-panel">
+      <span style="color:gold; font-size:1.5rem;">You Are Invited</span>
     </div>
+    <div id="intro-text">Tap to Enter</div>
   </div>
 
+  <!-- Background Music -->
+  <audio id="bg-music" loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg" />
+  </audio>
+
+  <!-- Door Sound -->
+  <audio id="door-sound">
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_6ac1e7e736.mp3?filename=door-open-110401.mp3" type="audio/mpeg" />
+  </audio>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="#invitation">Invitation</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#wishes">Wishes</a>
+    <a href="#rsvp">RSVP</a>
+  </nav>
+
+  <!-- Invitation -->
+  <section id="invitation">
+    <h2>Wedding Invitation</h2>
+    <p style="text-align:center; font-size:1.2rem;">Alwin Riady Argono & Serfin Marcella</p>
+    <p style="text-align:center;">Saturday, May 30, 2026 — 6:00 PM</p>
+    <p style="text-align:center;">Royal Avilla, Lombok</p>
+    <p style="text-align:center; color:gold; margin-top:1rem;">Dress Code: No Batik, Suits Only</p>
+  </section>
+
+  <!-- Gallery -->
+  <section id="gallery">
+    <h2>Gallery</h2>
+    <div class="gallery-grid">
+      <img src="https://wallpapers.com/images/hd/demon-slayer-infinity-castle-4k-y76o8swqup16oupt.jpg" />
+      <img src="https://images6.alphacoders.com/133/1339593.png" />
+      <img src="https://images.alphacoders.com/133/1339591.png" />
+    </div>
+  </section>
+
+  <!-- Wishes -->
+  <section id="wishes">
+    <h2>Messages & Wishes</h2>
+    <div id="wishes-box">Loading...</div>
+  </section>
+
+  <!-- RSVP -->
+  <section id="rsvp">
+    <h2>RSVP</h2>
+    <div class="rsvp-box">
+      <input id="name" placeholder="Full Name" />
+      <input id="phone" placeholder="Phone Number" />
+      <select id="attend">
+        <option value="Yes">Yes, I will attend</option>
+        <option value="No">Sorry, I cannot attend</option>
+      </select>
+      <select id="people">
+        <option value="1">1 Person</option>
+        <option value="2">2 People</option>
+      </select>
+      <textarea id="wishes-input" placeholder="Your wishes for the couple"></textarea>
+      <button class="rsvp-btn" onclick="submitRSVP()">Send RSVP</button>
+    </div>
+    <div id="thankyou-message"></div>
+  </section>
+
   <script>
-    document.getElementById("rsvp-form").addEventListener("submit", function (e) {
-      e.preventDefault();
+    /* Door Opening Logic */
+    const door = document.getElementById("door-panel");
+    const intro = document.getElementById("intro-door");
+    const bgMusic = document.getElementById("bg-music");
+    const doorSound = document.getElementById("door-sound");
 
-      const payload = {
-        data: {
-          "Full Name": document.getElementById("name").value,
-          "Phone Numbers": document.getElementById("phone").value,
-          "Will You Attend": document.getElementById("attendance").value,
-          "Number Of People": document.getElementById("number").value,
-          "Wishes For The Couple": document.getElementById("wishes").value
-        }
-      };
-
-      fetch("https://sheetdb.io/api/v1/4e3p3gyhynzah", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      })
-        .then(res => {
-          if (res.ok) {
-            window.location.href = "thankyou.html";
-          } else {
-            alert("Something went wrong. Please try again.");
-          }
-        });
+    door.addEventListener("click", () => {
+      doorSound.play();
+      door.classList.add("open");
+      setTimeout(() => {
+        intro.style.opacity = 0;
+        setTimeout(() => intro.style.display = "none", 1000);
+        bgMusic.play();
+      }, 800);
     });
 
+    /* Load Wishes */
+    const wishesBox = document.getElementById("wishes-box");
     let wishes = [];
-    let displayIndex = 0;
-
-    function displayWishes() {
-      const container = document.getElementById("wishes-container");
-      container.innerHTML = "";
-
-      const toShow = wishes.slice(displayIndex, displayIndex + 3);
-      toShow.forEach(entry => {
-        const wishText = entry["Wishes For The Couple"]?.trim();
-        const guestName = entry["Full Name"]?.trim();
-
-        if (wishText) {
-          const div = document.createElement("div");
-          div.className = "wish-entry";
-          div.innerHTML = `<strong>${guestName || 'Anonymous'}</strong> - ${wishText}`;
-          container.appendChild(div);
-        }
-      });
-
-      displayIndex = (displayIndex + 3) % wishes.length;
-    }
+    let currentIndex = 0;
 
     fetch("https://sheetdb.io/api/v1/4e3p3gyhynzah")
-      .then(response => response.json())
+      .then(r => r.json())
       .then(data => {
-        wishes = data.filter(entry => entry["Wishes For The Couple"]?.trim());
-        if (wishes.length === 0) {
-          document.getElementById("wishes-container").innerText = "No wishes submitted yet.";
-        } else {
-          displayWishes();
-          setInterval(displayWishes, 6000); // rotate every 6 seconds
-        }
-      })
-      .catch(error => {
-        document.getElementById("wishes-container").innerText = "Could not load wishes.";
-        console.error("Error loading wishes:", error);
-      });
-  </script>
-</body>
-</html>
